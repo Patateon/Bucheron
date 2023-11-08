@@ -46,7 +46,7 @@ while running:
    
    
     create_level(game, nbblock_x, nbblock_y, vel)
-   
+
 
     timeTaken = pygame.time.get_ticks()-start
     actualDelay = delay - timeTaken
