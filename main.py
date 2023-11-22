@@ -8,6 +8,9 @@ SCREEN_WIDTH =800
 SCREEN_HEIGHT = 600
 BLOCKX = 20
 BLOCKY = 15
+SPACING = 1
+
+# Colors
 EMPTY_CLR = (240, 234, 210)
 LOWTREE_CLR = (167, 201, 87)
 MIDTREE_CLR = (106, 153, 78)
@@ -19,7 +22,7 @@ def create_level(screen, grid, sizeBlock):
     for x in range(BLOCKX):
         for y in range(BLOCKY):
             cell=grid.getCell((y,x))
-            rectangle=pygame.rect.Rect(sizeBlock*x + .5,sizeBlock*y + .5,sizeBlock -1,sizeBlock - 1) # Spacing de .1 provisoire pour les tests
+            rectangle=pygame.rect.Rect(sizeBlock*x + SPACING, sizeBlock*y + SPACING, sizeBlock - 2*SPACING, sizeBlock - 2*SPACING) # Spacing de 1 provisoire pour les tests
             if (cell == State.vide):
                 pygame.draw.rect(screen, EMPTY_CLR, rectangle)
             elif (cell == State.lowTree):
