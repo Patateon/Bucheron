@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from state import State
+
 class Grille:
     def __init__(self, dimX: int, dimY:int):
         self.x=dimX

@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import IntEnum
 
-class State(enum):
+class State(IntEnum):
     vide = 0
     lowTree = 1
     midTree = 2
