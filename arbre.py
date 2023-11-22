@@ -1,16 +1,11 @@
-from Enum import enum
-
-class State(enum):
-        lowTree = 0
-        midTree = 1
-        highTree = 2
-        fruitTree = 3
+from enum import Enum
+from valueGrid import valueGrid
 
 
 class Arbre():
 
     def __init__(self, x, y):
-        self.pos = pos
+        self.pos = [x, y]
         self.state = State.lowTree
 
     def grow(self):
@@ -20,4 +15,16 @@ class Arbre():
     def growFruits(self):
         if (self.state == State.highTree):
             self.state += 1
+
+    def setPos(self, x, y): # Peut etre utile mais normalement non
+        self.pos = [x, y]
+
+    def getPos(self):
+        return self.pos
+
+    def setState(self, state:State):
+        self.state = state
+
+    def getState(self):
+        return self.state
     
