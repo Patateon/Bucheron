@@ -46,7 +46,7 @@ if __name__ == "__main__":
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(SCREEN_HEIGHT//BLOCKY,SCREEN_WIDTH//BLOCKX)
     game=Game(BLOCKX, BLOCKY, 3, 3)
-    #game.initGame()
+    # game.initGame()
     grid = game.grille #A remplacer par avec la creation du jeux
 
     running = True
