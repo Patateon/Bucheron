@@ -1,57 +1,79 @@
 import pygame
-import numpy as np
 from game import *
 from agent import *
-
-pygame.init()
-
-# RNGESUS
-rng = np.random.default_rng()
+from state import State
 
 # Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Forest-Farming")
+SCREEN_WIDTH =800
+SCREEN_HEIGHT = 600
+BLOCKX = 20
+BLOCKY = 15
+SPACING = 1
 
-vel=20      #size of the block or speed pac bc he travels by block
+# Colors
+EMPTY_CLR = (240, 234, 210)
+LOWTREE_CLR = (167, 201, 87)
+MIDTREE_CLR = (106, 153, 78)
+HIGHTREE_CLR = (56, 102, 65)
+FRUITTREE_CLR = (249, 65, 68)
+LUMBER_CLR = (157, 2, 8)
 
-nbblock_x=SCREEN_WIDTH//vel     
-nbblock_y=SCREEN_HEIGHT//vel
+def create_level(screen, grid, sizeBlock):
+    for x in range(BLOCKX):
+        for y in range(BLOCKY):
+            cell=grid.getCell((y,x))
+            rectangle=pygame.rect.Rect(sizeBlock*x + SPACING, sizeBlock*y + SPACING, sizeBlock - 2*SPACING, sizeBlock - 2*SPACING) # Spacing de 1 provisoire pour les tests
+            if (cell == State.vide):
+                pygame.draw.rect(screen, EMPTY_CLR, rectangle)
+            elif (cell == State.lowTree):
+                pygame.draw.rect(screen, LOWTREE_CLR, rectangle)
+            elif (cell == State.midTree):
+                pygame.draw.rect(screen, MIDTREE_CLR, rectangle)
+            elif (cell == State.highTree):
+                pygame.draw.rect(screen, HIGHTREE_CLR, rectangle)
+            elif (cell == State.fruitTree):
+                pygame.draw.rect(screen, FRUITTREE_CLR, rectangle)
+            elif (cell == State.lumber):
+                pygame.draw.rect(screen, LUMBER_CLR, rectangle)
 
-game=Game(nbblock_y,nbblock_x,0.8,2,[[2,2],[17,4]])
-game.initGame()
-
-def create_level(game, nbblock_x, nbblock_y):
-    for j in range(nbblock_x):
-        for i in range(nbblock_y):
-            pass 
 
 
-
-running = True
-delay = 16
-tick = 0
-
-while running:
-
-    start = pygame.time.get_ticks()
-    tick += 1
+if __name__ == "__main__":
     
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
+    pygame.init()
     
-    screen.fill((0,0,0))
-   
-   
-    create_level(game, nbblock_x, nbblock_y, vel)
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Forest-Farming")
+    sizeBlock=min(SCREEN_HEIGHT//BLOCKY,SCREEN_WIDTH//BLOCKX)
+    game=Game(BLOCKX, BLOCKY, 3, 3)
+    #game.initGame()
+    grid = game.grille #A remplacer par avec la creation du jeux
 
-    timeTaken = pygame.time.get_ticks()-start
-    actualDelay = delay - timeTaken
-    pygame.time.delay(actualDelay)
+    running = True
+    delay = 16
+    tick = 0
+    surface=pygame.Surface((SCREEN_WIDTH,SCREEN_HEIGHT))
 
-    pygame.display.update()
+    while running:
 
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running=False
+                if event.type == pygame.KEYDOWN:
+                    pass
 
-pygame.quit()
+        # Gestion du delai
+        start = pygame.time.get_ticks()
+        tick += 1
+
+        # Update de la grille
+        create_level(screen,grid,sizeBlock)
+
+        # Calcul du delai
+        timeTaken = pygame.time.get_ticks()-start
+        actualDelay = delay - timeTaken
+        pygame.time.delay(actualDelay)
+
+        pygame.display.update()
+
+    pygame.quit()
