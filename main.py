@@ -1,7 +1,9 @@
 import pygame
+import numpy as np
 from game import *
 from agent import *
-from state import State
+from state import *
+from astar import *
 
 # Constants
 SCREEN_WIDTH =800
@@ -17,6 +19,7 @@ MIDTREE_CLR = (106, 153, 78)
 HIGHTREE_CLR = (56, 102, 65)
 FRUITTREE_CLR = (249, 65, 68)
 LUMBER_CLR = (157, 2, 8)
+# DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
 
 def create_level(screen, grid, sizeBlock):
     for x in range(BLOCKX):
@@ -35,6 +38,8 @@ def create_level(screen, grid, sizeBlock):
                 pygame.draw.rect(screen, FRUITTREE_CLR, rectangle)
             elif (cell == State.lumber):
                 pygame.draw.rect(screen, LUMBER_CLR, rectangle)
+            # elif (cell == 6):
+            #     pygame.draw.rect(screen, DEBUG_CLR, rectangle)
 
 
 
@@ -46,8 +51,11 @@ if __name__ == "__main__":
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(SCREEN_HEIGHT//BLOCKY,SCREEN_WIDTH//BLOCKX)
     game=Game(BLOCKX, BLOCKY, 3, 3)
-    #game.initGame()
     grid = game.grille #A remplacer par avec la creation du jeux
+
+    # astar = Astar(game)
+    # astar.startSearch(np.array([0, 0]), np.array([14, 14]))
+    # astar.showPath()
 
     running = True
     delay = 16
@@ -57,10 +65,10 @@ if __name__ == "__main__":
     while running:
 
         for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running=False
-                if event.type == pygame.KEYDOWN:
-                    pass
+            if event.type == pygame.QUIT:
+                running=False
+            if event.type == pygame.KEYDOWN:
+                pass
 
         # Gestion du delai
         start = pygame.time.get_ticks()
