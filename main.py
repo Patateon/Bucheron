@@ -4,6 +4,7 @@ from game import *
 from agent import *
 from state import *
 from astar import *
+import sys
 
 # Constants
 SCREEN_WIDTH =800
@@ -19,27 +20,28 @@ MIDTREE_CLR = (106, 153, 78)
 HIGHTREE_CLR = (56, 102, 65)
 FRUITTREE_CLR = (249, 65, 68)
 LUMBER_CLR = (157, 2, 8)
-# DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
+DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
 
 def create_level(screen, grid, sizeBlock):
     for x in range(BLOCKX):
         for y in range(BLOCKY):
             cell=grid.getCell((y,x))
             rectangle=pygame.rect.Rect(sizeBlock*x + SPACING, sizeBlock*y + SPACING, sizeBlock - 2*SPACING, sizeBlock - 2*SPACING) # Spacing de 1 provisoire pour les tests
-            if (cell == State.vide):
-                pygame.draw.rect(screen, EMPTY_CLR, rectangle)
-            elif (cell == State.lowTree):
-                pygame.draw.rect(screen, LOWTREE_CLR, rectangle)
-            elif (cell == State.midTree):
-                pygame.draw.rect(screen, MIDTREE_CLR, rectangle)
-            elif (cell == State.highTree):
-                pygame.draw.rect(screen, HIGHTREE_CLR, rectangle)
-            elif (cell == State.fruitTree):
-                pygame.draw.rect(screen, FRUITTREE_CLR, rectangle)
-            elif (cell == State.lumber):
-                pygame.draw.rect(screen, LUMBER_CLR, rectangle)
-            # elif (cell == 6):
-            #     pygame.draw.rect(screen, DEBUG_CLR, rectangle)
+            match cell:
+                case State.vide:
+                    pygame.draw.rect(screen, EMPTY_CLR, rectangle)
+                case State.lowTree:
+                    pygame.draw.rect(screen, LOWTREE_CLR, rectangle)
+                case State.midTree:
+                    pygame.draw.rect(screen, MIDTREE_CLR, rectangle)
+                case State.highTree:
+                    pygame.draw.rect(screen, HIGHTREE_CLR, rectangle)
+                case State.fruitTree:
+                    pygame.draw.rect(screen, FRUITTREE_CLR, rectangle)
+                case State.lumber:
+                    pygame.draw.rect(screen, LUMBER_CLR, rectangle)
+                case 6:
+                    pygame.draw.rect(screen, DEBUG_CLR, rectangle)
 
 
 
@@ -50,12 +52,12 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(SCREEN_HEIGHT//BLOCKY,SCREEN_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 3, 3)
+    game=Game(BLOCKX, BLOCKY, 3, 50)
     grid = game.grille #A remplacer par avec la creation du jeux
 
-    # astar = Astar(game)
-    # astar.startSearch(np.array([0, 0]), np.array([14, 14]))
-    # astar.showPath()
+    astar = Astar(game)
+    astar.startSearch(np.array([0, 0]), np.array([14, 14]))
+    astar.showPath()
 
     running = True
     delay = 16
