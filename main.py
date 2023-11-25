@@ -20,7 +20,7 @@ MIDTREE_CLR = (106, 153, 78)
 HIGHTREE_CLR = (56, 102, 65)
 FRUITTREE_CLR = (249, 65, 68)
 LUMBER_CLR = (157, 2, 8)
-DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
+# DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
 
 def create_level(screen, grid, sizeBlock):
     for x in range(BLOCKX):
@@ -40,8 +40,8 @@ def create_level(screen, grid, sizeBlock):
                     pygame.draw.rect(screen, FRUITTREE_CLR, rectangle)
                 case State.lumber:
                     pygame.draw.rect(screen, LUMBER_CLR, rectangle)
-                case 6:
-                    pygame.draw.rect(screen, DEBUG_CLR, rectangle)
+                # case 6:
+                #     pygame.draw.rect(screen, DEBUG_CLR, rectangle)
 
 
 
@@ -55,9 +55,9 @@ if __name__ == "__main__":
     game=Game(BLOCKX, BLOCKY, 3, 50)
     grid = game.grille #A remplacer par avec la creation du jeux
 
-    astar = Astar(game)
-    astar.startSearch(np.array([0, 0]), np.array([14, 14]))
-    astar.showPath()
+    # astar = Astar(game)
+    # astar.startSearch(np.array([0, 0]), np.array([14, 14]))
+    # astar.showPath()
 
     running = True
     delay = 16
