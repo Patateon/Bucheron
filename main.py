@@ -9,6 +9,7 @@ import sys
 # Constants
 SCREEN_WIDTH =800
 SCREEN_HEIGHT = 600
+# Dimensions de la grille
 BLOCKX = 20
 BLOCKY = 15
 SPACING = 1
@@ -19,9 +20,10 @@ LOWTREE_CLR = (167, 201, 87)
 MIDTREE_CLR = (106, 153, 78)
 HIGHTREE_CLR = (56, 102, 65)
 FRUITTREE_CLR = (249, 65, 68)
-LUMBER_CLR = (157, 2, 8)
-# DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
+LUMBER_CLR = (160, 2, 160)#VIOLET
+DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
 
+# Dessine la grille
 def create_level(screen, grid, sizeBlock):
     for x in range(BLOCKX):
         for y in range(BLOCKY):
@@ -40,8 +42,8 @@ def create_level(screen, grid, sizeBlock):
                     pygame.draw.rect(screen, FRUITTREE_CLR, rectangle)
                 case State.lumber:
                     pygame.draw.rect(screen, LUMBER_CLR, rectangle)
-                # case 6:
-                #     pygame.draw.rect(screen, DEBUG_CLR, rectangle)
+                case 6:
+                    pygame.draw.rect(screen, DEBUG_CLR, rectangle)
 
 
 
@@ -52,21 +54,29 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(SCREEN_HEIGHT//BLOCKY,SCREEN_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 3, 50)
+    game=Game(BLOCKX, BLOCKY, 2, 4)
+    print("POS AGENTS:")
+    for agent in game.agents:
+        print(agent.pos)
+    print("-----------------------")
     grid = game.grille #A remplacer par avec la creation du jeux
 
-    # astar = Astar(game)
-    # astar.startSearch(np.array([0, 0]), np.array([14, 14]))
-    # astar.showPath()
+    '''
+    astar = Astar(grid)
+    astar.startSearch(np.array([0, 0]), np.array([14, 14]))
+    astar.showPath()
+    '''
 
     running = True
-    delay = 16
+    delay = 400
     tick = 0
-    surface=pygame.Surface((SCREEN_WIDTH,SCREEN_HEIGHT))
+    #surface=pygame.Surface((SCREEN_WIDTH,SCREEN_HEIGHT))
+    surface=pygame.Surface((BLOCKX * sizeBlock, BLOCKY * sizeBlock))
 
     while running:
-
         for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                running = False
             if event.type == pygame.QUIT:
                 running=False
             if event.type == pygame.KEYDOWN:
@@ -85,5 +95,7 @@ if __name__ == "__main__":
         pygame.time.delay(actualDelay)
 
         pygame.display.update()
+        print("tick")
+        game.update()
 
     pygame.quit()
