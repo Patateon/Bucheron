@@ -24,6 +24,10 @@ FRUITTREE_CLR = (249, 65, 68)
 LUMBER_CLR = (160, 2, 160)#VIOLET
 DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
 
+# Les delais
+POUSSE = 5
+MATURATION = 30
+
 # Dessine la grille
 def create_level(screen, grid, sizeBlock):
     for x in range(BLOCKX):
@@ -87,6 +91,15 @@ if __name__ == "__main__":
         start = pygame.time.get_ticks()
         tick += 1
 
+        # Pousse arbre
+        if (tick % POUSSE == 0):
+            game.growArbres()
+        # Pousse fruits
+        if (tick % MATURATION == 0):
+            game.growFruits()
+
+        # Update arbre
+        game.updateArbre()
         # Update de la grille
         interface_surface.fill((255,255,255))
         interface_surface.blit(font.render(f'Temps : {pygame.time.get_ticks()//1000}s', True, (0,0,0)),(10,10))
