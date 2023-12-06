@@ -4,6 +4,7 @@ from game import *
 from agent import *
 from state import *
 from astar import *
+from cueilleur import *
 import sys
 
 # Constants
@@ -22,6 +23,7 @@ MIDTREE_CLR = (106, 153, 78)
 HIGHTREE_CLR = (56, 102, 65)
 FRUITTREE_CLR = (249, 65, 68)
 LUMBER_CLR = (160, 2, 160)#VIOLET
+HARVEST_CLR = (0, 0, 0)#NOIR
 DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
 
 # Les delais
@@ -47,7 +49,9 @@ def create_level(screen, grid, sizeBlock):
                     pygame.draw.rect(screen, FRUITTREE_CLR, rectangle)
                 case State.lumber:
                     pygame.draw.rect(screen, LUMBER_CLR, rectangle)
-                case 6:
+                case State.harvest:
+                    pygame.draw.rect(screen, HARVEST_CLR, rectangle)
+                case 7:
                     pygame.draw.rect(screen, DEBUG_CLR, rectangle)
 
 
@@ -58,8 +62,8 @@ if __name__ == "__main__":
     
     screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT+DISPLAY_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
-    sizeBlock=min(GAME_HEIGHT//BLOCKY,GAME_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 2, 4)
+    sizeBlock=min(SCREEN_HEIGHT//BLOCKY,SCREEN_WIDTH//BLOCKX)
+    game=Game(BLOCKX, BLOCKY, 2, 2, 4, 10, 3)
     print("POS AGENTS:")
     for agent in game.agents:
         print(agent.pos)
