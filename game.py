@@ -143,7 +143,7 @@ class Game:
         print("-----------")
         #On trouve l'arbre le plus proche
         arbreGoal = self.getClosestTree(agent.getPos()[1], agent.getPos()[0])
-        agent.arbreGoal = arbreGoal.getPos()
+        agent.arbreGoal = [arbreGoal.getPos()[1], arbreGoal.getPos()[0]]
         #On trouve une position adjacente a l'arbre le plus proche
         agent.posGoal = self.getAdjacentPos(agent.getPos()[1], agent.getPos()[0], agent.arbreGoal[0], agent.arbreGoal[1])
         print("agent.pos :", agent.pos)
@@ -158,10 +158,10 @@ class Game:
         print("-------------------")
 
     def generateGoalCueilleur(self, cueilleur):
-        print("-----------")
-        print("cueilleur.pos :", cueilleur.pos)
-        print("cueilleur.arbreGoal :", cueilleur.arbreGoal)
-        print("cueilleur.posGoal :", cueilleur.posGoal)
+        #print("-----------")
+        #print("cueilleur.pos :", cueilleur.pos)
+        #print("cueilleur.arbreGoal :", cueilleur.arbreGoal)
+        #print("cueilleur.posGoal :", cueilleur.posGoal)
         #astar = Astar(self.grille)
         #astar.startSearch(np.array(cueilleur.pos), np.array(cueilleur.posGoal))
         #astar.showPath()
