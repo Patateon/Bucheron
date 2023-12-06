@@ -46,7 +46,8 @@ class Astar():
         for offset in np.array([[1, 0], [0, 1], [-1, 0], [0, -1]]):
             tmp = offset + position
             if (tmp[0] >= 0 and tmp[0] < self.grille.x and tmp[1] >= 0 and tmp[1] < self.grille.y):
-                if (self.grille.getCell([tmp[1], tmp[0]]) == State.vide):
+                aled = self.grille.getCell([tmp[1], tmp[0]])
+                if (aled == State.vide) or (aled == State.lumber) or (aled == State.harvest):
                     neighbours.append(Node(tmp, True))
                 else:
                     neighbours.append(Node(tmp, False))

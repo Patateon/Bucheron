@@ -7,11 +7,11 @@ EST = tuple([1, 0])
 OUEST = tuple([-1, 0])
 
 class Agent:
-    def __init__(self, agentX, agentY, arbreGoalX, arbreGoalY, posGoalX, posGoalY):
+    def __init__(self, agentX, agentY):
         self.pos = [agentX, agentY]
         self.goal = 0
-        self.arbreGoal = [arbreGoalX, arbreGoalY]
-        self.posGoal = [posGoalX, posGoalY]
+        self.arbreGoal = []
+        self.posGoal = []
         self.path = []
 
     def getPos(self):
@@ -42,10 +42,13 @@ class Agent:
         return self.path
 
     def setPath(self, path):
-        self.path = path
-        #On enlève la première position du path, qui est la pos du bucheron
-        print("setpath")
-        self.path.pop(0)
+        if(path == False):
+            pass
+        else:
+            self.path = path
+            #On enlève la première position du path, qui est la pos du bucheron
+            print("setpath")
+            self.path.pop(0)
 
     def can_move(self, x, y, grille):
         print("next move :")
@@ -59,6 +62,7 @@ class Agent:
         print(self.getPos())
         print(self.getPosGoal())
         if(self.getPos() == self.getPosGoal()):
+            #self.setGoal(0)
             print("Goal atteint")
             return
         #si path vide

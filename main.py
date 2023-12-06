@@ -62,12 +62,12 @@ if __name__ == "__main__":
     
     screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT+DISPLAY_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
-    sizeBlock=min(SCREEN_HEIGHT//BLOCKY,SCREEN_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 2, 2, 4, 10, 3)
-    print("POS AGENTS:")
-    for agent in game.agents:
-        print(agent.pos)
-    print("-----------------------")
+    sizeBlock=min(GAME_HEIGHT//BLOCKY,GAME_WIDTH//BLOCKX)
+    game=Game(BLOCKX, BLOCKY, 10, 2, 15, 10, 3)
+    #print("POS AGENTS:")
+    #for agent in game.agents:
+        #print(agent.pos)
+    #print("-----------------------")
     grid = game.grille #A remplacer par avec la creation du jeux
 
     '''
