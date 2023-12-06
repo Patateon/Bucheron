@@ -18,8 +18,10 @@ class Game:
         self.arbres = []
         self.agents = []
         self.cueilleurs = []
+        self.treshold = 5
         self.score = Score(valueBois, valueFruit)
         self.initGame()
+
 
     def initGame(self):
         self.generateTree()
@@ -44,12 +46,7 @@ class Game:
             newAgent = (random.randint(0,self.grille.y - 1),random.randint(0,self.grille.x - 1))
             if(self.grille.getCell(newAgent) == 0):
                 self.grille.setCell(newAgent, State.lumber)
-                #On trouve l'arbre le plus proche
-                arbreGoal = self.getClosestTree(newAgent[1], newAgent[0])
-                arbreGoalPos = arbreGoal.getPos()
-                #On trouve une position adjacente a l'arbre le plus proche
-                posGoal = self.getAdjacentPos(newAgent[1], newAgent[0], arbreGoalPos[0], arbreGoalPos[1])
-                thatAgent = agent.Agent(newAgent[1], newAgent[0], arbreGoalPos[0], arbreGoalPos[1], posGoal[0], posGoal[1])
+                thatAgent = agent.Agent(newAgent[1], newAgent[0])
                 self.agents.append(thatAgent)
                 nbA +=1
 
@@ -61,11 +58,17 @@ class Game:
                 self.grille.setCell(newCueilleur, State.harvest)
                 #On trouve l'arbre le plus proche
                 arbreGoal = self.getClosestFruitTree(newCueilleur[1], newCueilleur[0])
-                arbreGoalPos = arbreGoal.getPos()
-                #On trouve une position adjacente a l'arbre le plus proche
-                posGoal = self.getAdjacentPos(newCueilleur[1], newCueilleur[0], arbreGoalPos[0], arbreGoalPos[1])
-                thatCueilleur = cueilleur.Cueilleur(newCueilleur[1], newCueilleur[0], arbreGoalPos[0], arbreGoalPos[1], posGoal[0], posGoal[1])
-                self.cueilleurs.append(thatCueilleur)
+                if(arbreGoal != None):
+                    arbreGoalPos = arbreGoal.getPos()
+                    #On trouve une position adjacente a l'arbre le plus proche
+                    posGoal = self.getAdjacentPos(newCueilleur[1], newCueilleur[0], arbreGoalPos[0], arbreGoalPos[1])
+                    thatCueilleur = cueilleur.Cueilleur(newCueilleur[1], newCueilleur[0], arbreGoalPos[0], arbreGoalPos[1], posGoal[0], posGoal[1])
+                    thatCueilleur.setGoal(1)
+                    self.cueilleurs.append(thatCueilleur)
+                else:
+                    thatCueilleur = cueilleur.Cueilleur(newCueilleur[1], newCueilleur[0], None, None, None, None)
+                    thatCueilleur.setGoal(0)
+                    self.cueilleurs.append(thatCueilleur)
                 nbA +=1
 
 
@@ -93,7 +96,7 @@ class Game:
                 if(dist2 < dist1):
                     dist1 = dist2
                     closest = i
-        if(self.arbres[0].getState == 4):
+        if(self.arbres[closest].getState == 4):
             return self.arbres[closest]
         else:
             return
@@ -135,29 +138,43 @@ class Game:
                 game.score.increaseWoodScore()
             self.grille.setCell(arbre.getPos(), arbre.getState())
 
-    def generateGoals(self):
+    def generateGoalAgent(self, agent):
         print("generateGoals()")
-        for agent in self.agents:
-            print("-----------")
-            print("agent.pos :", agent.pos)
-            print("agent.arbreGoal :", agent.arbreGoal)
-            print("agent.posGoal :", agent.posGoal)
-            astar = Astar(self.grille)
-            astar.startSearch(np.array(agent.pos), np.array(agent.posGoal))
-            #astar.showPath()
-            agent.setPath(astar.path)
-        print("-------------------")
-        for cueilleur in self.cueilleurs:
-            print("-----------")
-            print("cueilleur.pos :", cueilleur.pos)
-            print("cueilleur.arbreGoal :", cueilleur.arbreGoal)
-            print("cueilleur.posGoal :", cueilleur.posGoal)
-            astar = Astar(self.grille)
-            astar.startSearch(np.array(cueilleur.pos), np.array(cueilleur.posGoal))
-            #astar.showPath()
-            cueilleur.setPath(astar.path)
+        print("-----------")
+        #On trouve l'arbre le plus proche
+        arbreGoal = self.getClosestTree(agent.getPos()[1], agent.getPos()[0])
+        agent.arbreGoal = arbreGoal.getPos()
+        #On trouve une position adjacente a l'arbre le plus proche
+        agent.posGoal = self.getAdjacentPos(agent.getPos()[1], agent.getPos()[0], agent.arbreGoal[0], agent.arbreGoal[1])
+        print("agent.pos :", agent.pos)
+        print("agent.arbreGoal :", agent.arbreGoal)
+        print("agent.posGoal :", agent.posGoal)
+        astar = Astar(self.grille)
+        astar.startSearch(np.array(agent.pos), np.array(agent.posGoal))
+        #astar.showPath()
+        agent.setPath(astar.path)
+        agent.setGoal(1)
+        #print(agent.path[0].getPosition())
         print("-------------------")
 
+    def generateGoalCueilleur(self, cueilleur):
+        print("-----------")
+        print("cueilleur.pos :", cueilleur.pos)
+        print("cueilleur.arbreGoal :", cueilleur.arbreGoal)
+        print("cueilleur.posGoal :", cueilleur.posGoal)
+        #astar = Astar(self.grille)
+        #astar.startSearch(np.array(cueilleur.pos), np.array(cueilleur.posGoal))
+        #astar.showPath()
+        #cueilleur.setPath(astar.path)
+        print("-------------------")
+
+    def generateGoals(self):
+        for agent in self.agents:
+            if(not agent.getGoal()):
+                self.generateGoalAgent(agent)
+        for cueilleur in self.cueilleurs:
+            if(not cueilleur.getGoal()):
+                self.generateGoalCueilleur(cueilleur)
 
     def update(self):
         for agent in self.agents:
@@ -167,15 +184,15 @@ class Game:
                 self.setCell([lastPos[1], lastPos[0]], 0)
                 self.setCell([agent.getPos()[1], agent.getPos()[0]], 5)
             else:
-                agent.generateGoals()
+                self.generateGoalAgent(agent)
         for cueilleur in self.cueilleurs:
-            if(cueilleur.getGoal())
+            if(cueilleur.getGoal()):
                 lastPos = cueilleur.getPos()
                 cueilleur.doNextMove(self.grille)
                 self.setCell([lastPos[1], lastPos[0]], 0)
                 self.setCell([cueilleur.getPos()[1], cueilleur.getPos()[0]], 6)
             else:
-                cueilleur.generateGoals()
+                self.generateGoalCueilleur(cueilleur)
 
     def getCell(self, position):
         return self.grille.getCell(position)
