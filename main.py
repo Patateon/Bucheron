@@ -16,7 +16,7 @@ BLOCKY = 15
 SPACING = 1
 
 # Colors
-EMPTY_CLR = (240, 234, 210)
+EMPTY_CLR = (200, 234, 170)
 LOWTREE_CLR = (167, 201, 87)
 MIDTREE_CLR = (106, 153, 78)
 HIGHTREE_CLR = (56, 102, 65)
@@ -26,36 +26,34 @@ DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
 
 # Dessine la grille
 def create_level(screen:pygame.surface.Surface, grid:Grille, sizeBlock:int):
+    sprite_size = (2*(sizeBlock - 2*SPACING), 2*(sizeBlock - 2*SPACING))
     low_image = pygame.image.load("sprite/low_tree.png")
-    low_image = pygame.transform.scale(low_image,(sizeBlock - 2*SPACING, sizeBlock - 2*SPACING))
+    low_image = pygame.transform.scale(low_image,sprite_size)
     mid_image = pygame.image.load("sprite/mid_tree.png")
-    mid_image = pygame.transform.scale(mid_image,(sizeBlock - 2*SPACING, sizeBlock - 2*SPACING))
+    mid_image = pygame.transform.scale(mid_image,sprite_size)
     big_image = pygame.image.load("sprite/big_tree.png")
-    big_image = pygame.transform.scale(big_image,(sizeBlock - 2*SPACING, sizeBlock - 2*SPACING))
+    big_image = pygame.transform.scale(big_image,sprite_size)
     fruit_image = pygame.image.load("sprite/fruit_tree.png")
-    fruit_image = pygame.transform.scale(fruit_image,(sizeBlock - 2*SPACING, sizeBlock - 2*SPACING))
-
+    fruit_image = pygame.transform.scale(fruit_image,sprite_size)
+    lumber_image = pygame.image.load("sprite/lumberjack.png")
+    lumber_image = pygame.transform.scale(lumber_image,sprite_size)
     for x in range(BLOCKX):
         for y in range(BLOCKY):
             cell=grid.getCell((y,x))
             rectangle=pygame.rect.Rect(sizeBlock*x + SPACING, sizeBlock*y + SPACING, sizeBlock - 2*SPACING, sizeBlock - 2*SPACING) # Spacing de 1 provisoire pour les tests
+            position = (sizeBlock*x + SPACING/2-sizeBlock/2, sizeBlock*y + SPACING/2-sizeBlock)
+            pygame.draw.rect(screen, EMPTY_CLR, rectangle)
             match cell:
-                case State.vide:
-                    pygame.draw.rect(screen, EMPTY_CLR, rectangle)
                 case State.lowTree:
-                    pygame.draw.rect(screen, LOWTREE_CLR, rectangle)
-                    screen.blit(low_image, (sizeBlock*x + SPACING, sizeBlock*y + SPACING))
+                    screen.blit(low_image, position)
                 case State.midTree:
-                    pygame.draw.rect(screen, MIDTREE_CLR, rectangle)
-                    screen.blit(mid_image, (sizeBlock*x + SPACING, sizeBlock*y + SPACING))
+                    screen.blit(mid_image, position)
                 case State.highTree:
-                    pygame.draw.rect(screen, HIGHTREE_CLR, rectangle)
-                    screen.blit(big_image, (sizeBlock*x + SPACING, sizeBlock*y + SPACING))
+                    screen.blit(big_image, position)
                 case State.fruitTree:
-                    pygame.draw.rect(screen, FRUITTREE_CLR, rectangle)
-                    screen.blit(fruit_image, (sizeBlock*x + SPACING, sizeBlock*y + SPACING))
+                    screen.blit(fruit_image, position)
                 case State.lumber:
-                    pygame.draw.rect(screen, LUMBER_CLR, rectangle)
+                    screen.blit(lumber_image, position)
                 case 6:
                     pygame.draw.rect(screen, DEBUG_CLR, rectangle)
 
@@ -68,7 +66,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT+DISPLAY_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(GAME_HEIGHT//BLOCKY,GAME_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 2, 4)
+    game=Game(BLOCKX, BLOCKY, 2, 40)
     print("POS AGENTS:")
     for agent in game.agents:
         print(agent.pos)
