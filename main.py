@@ -7,8 +7,9 @@ from astar import *
 import sys
 
 # Constants
-SCREEN_WIDTH =800
-SCREEN_HEIGHT = 600
+GAME_WIDTH =800
+GAME_HEIGHT = 600
+DISPLAY_HEIGHT = 100
 # Dimensions de la grille
 BLOCKX = 20
 BLOCKY = 15
@@ -51,9 +52,9 @@ if __name__ == "__main__":
     
     pygame.init()
     
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT+DISPLAY_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
-    sizeBlock=min(SCREEN_HEIGHT//BLOCKY,SCREEN_WIDTH//BLOCKX)
+    sizeBlock=min(GAME_HEIGHT//BLOCKY,GAME_WIDTH//BLOCKX)
     game=Game(BLOCKX, BLOCKY, 2, 4)
     print("POS AGENTS:")
     for agent in game.agents:
@@ -70,9 +71,9 @@ if __name__ == "__main__":
     running = True
     delay = 400
     tick = 0
-    #surface=pygame.Surface((SCREEN_WIDTH,SCREEN_HEIGHT))
-    surface=pygame.Surface((BLOCKX * sizeBlock, BLOCKY * sizeBlock))
-
+    interface_surface = pygame.Surface((GAME_WIDTH,DISPLAY_HEIGHT))
+    game_surface = pygame.Surface((GAME_WIDTH,GAME_HEIGHT))
+    font = pygame.font.SysFont('DejaVuSerif-Bold.ttf',40)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
@@ -87,7 +88,12 @@ if __name__ == "__main__":
         tick += 1
 
         # Update de la grille
-        create_level(screen,grid,sizeBlock)
+        interface_surface.fill((255,255,255))
+        interface_surface.blit(font.render(f'Temps : {pygame.time.get_ticks()//1000}s', True, (0,0,0)),(10,10))
+        interface_surface.blit(font.render(f'Score : {game.score.getScore()}pts', True, (0,0,0)),(GAME_WIDTH//2,10))
+        screen.blit(interface_surface,(0,0))
+        create_level(game_surface,grid,sizeBlock)
+        screen.blit(game_surface,(0,DISPLAY_HEIGHT))
 
         # Calcul du delai
         timeTaken = pygame.time.get_ticks()-start
