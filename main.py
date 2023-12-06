@@ -25,7 +25,16 @@ LUMBER_CLR = (160, 2, 160)#VIOLET
 DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
 
 # Dessine la grille
-def create_level(screen, grid, sizeBlock):
+def create_level(screen:pygame.surface.Surface, grid:Grille, sizeBlock:int):
+    low_image = pygame.image.load("sprite/low_tree.png")
+    low_image = pygame.transform.scale(low_image,(sizeBlock - 2*SPACING, sizeBlock - 2*SPACING))
+    mid_image = pygame.image.load("sprite/mid_tree.png")
+    mid_image = pygame.transform.scale(mid_image,(sizeBlock - 2*SPACING, sizeBlock - 2*SPACING))
+    big_image = pygame.image.load("sprite/big_tree.png")
+    big_image = pygame.transform.scale(big_image,(sizeBlock - 2*SPACING, sizeBlock - 2*SPACING))
+    fruit_image = pygame.image.load("sprite/fruit_tree.png")
+    fruit_image = pygame.transform.scale(fruit_image,(sizeBlock - 2*SPACING, sizeBlock - 2*SPACING))
+
     for x in range(BLOCKX):
         for y in range(BLOCKY):
             cell=grid.getCell((y,x))
@@ -35,12 +44,16 @@ def create_level(screen, grid, sizeBlock):
                     pygame.draw.rect(screen, EMPTY_CLR, rectangle)
                 case State.lowTree:
                     pygame.draw.rect(screen, LOWTREE_CLR, rectangle)
+                    screen.blit(low_image, (sizeBlock*x + SPACING, sizeBlock*y + SPACING))
                 case State.midTree:
                     pygame.draw.rect(screen, MIDTREE_CLR, rectangle)
+                    screen.blit(mid_image, (sizeBlock*x + SPACING, sizeBlock*y + SPACING))
                 case State.highTree:
                     pygame.draw.rect(screen, HIGHTREE_CLR, rectangle)
+                    screen.blit(big_image, (sizeBlock*x + SPACING, sizeBlock*y + SPACING))
                 case State.fruitTree:
                     pygame.draw.rect(screen, FRUITTREE_CLR, rectangle)
+                    screen.blit(fruit_image, (sizeBlock*x + SPACING, sizeBlock*y + SPACING))
                 case State.lumber:
                     pygame.draw.rect(screen, LUMBER_CLR, rectangle)
                 case 6:
