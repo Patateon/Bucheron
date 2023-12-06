@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import arbre
 import agent
+from score import *
 import cueilleur
 from grille import *
 from astar import *
@@ -8,7 +9,8 @@ import random
 import numpy as np
 
 class Game:
-    def __init__(self, dimX, dimY, nbAgents, nbCueilleurs, nbArbres):
+
+    def __init__(self, dimX, dimY, nbAgents, nbCueilleurs, nbArbres, valueBois, valueFruit):
         self.grille = Grille(dimX, dimY)
         self.nbAgents = nbAgents
         self.nbArbres = nbArbres
@@ -16,6 +18,7 @@ class Game:
         self.arbres = []
         self.agents = []
         self.cueilleurs = []
+        self.score = Score(valueBois, valueFruit)
         self.initGame()
 
     def initGame(self):
@@ -112,7 +115,25 @@ class Game:
         return [arbreX + 1, arbreY]
 
 
+    def growArbres(self):
+        # nbArbreToGrow = random.randint(0, self.nbArbres-1)
+        for index_arbre in range(self.nbArbres):
+            if (random.randint(0, 1)):
+                self.arbres[index_arbre].grow()
 
+    def growFruits(self):
+        # nbArbreToGrow = random.randint(0, self.nbArbres-1)
+        for index_arbre in range(self.nbArbres):
+            if (random.randint(0, 1)):
+                self.arbres[index_arbre].growFruits()
+
+    def updateArbre(self):
+        for arbre in self.arbres:
+            if (arbre.getPV() == 0):
+                self.grille.setCell(arbre.getPos(), state.vide)
+                self.arbres.remove(arbre)
+                game.score.increaseWoodScore()
+            self.grille.setCell(arbre.getPos(), arbre.getState())
 
     def generateGoals(self):
         print("generateGoals()")
