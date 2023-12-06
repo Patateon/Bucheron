@@ -7,13 +7,14 @@ import random
 import numpy as np
 
 class Game:
-    def __init__(self, dimX, dimY, nbAgents, nbArbres):
+    def __init__(self, dimX, dimY, nbAgents, nbArbres, valueBois, valueFruit):
         self.grille = Grille(dimX, dimY)
         self.nbAgents = nbAgents
         self.nbArbres = nbArbres
         self.arbres = []
         self.agents = []
         self.initGame()
+        self.score = Score(valueBois, valueFruit)
 
     def initGame(self):
         self.generateTree()
@@ -75,7 +76,25 @@ class Game:
         return [arbreX + 1, arbreY]
 
 
+    def growArbres(self):
+        # nbArbreToGrow = random.randint(0, self.nbArbres-1)
+        for index_arbre in range(self.nbArbres):
+            if (random.randint(0, 1)):
+                self.arbres[index_arbre].grow()
 
+    def growFruits(self):
+        # nbArbreToGrow = random.randint(0, self.nbArbres-1)
+        for index_arbre in range(self.nbArbres):
+            if (random.randint(0, 1)):
+                self.arbres[index_arbre].growFruits()
+
+    def updateArbre(self):
+        for arbre in self.arbres:
+            if (arbre.getPV() == 0):
+                self.grille.setCell(arbre.getPos(), state.vide)
+                self.arbres.remove(arbre)
+                game.score.increaseWoodScore()
+            self.grille.setCell(arbre.getPos(), arbre.getState())
 
     def generateGoals(self):
         print("generateGoals()")

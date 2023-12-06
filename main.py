@@ -23,6 +23,10 @@ FRUITTREE_CLR = (249, 65, 68)
 LUMBER_CLR = (160, 2, 160)#VIOLET
 DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
 
+# Les delais
+POUSSE = 5
+MATURATION = 30
+
 # Dessine la grille
 def create_level(screen, grid, sizeBlock):
     for x in range(BLOCKX):
@@ -54,7 +58,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(SCREEN_HEIGHT//BLOCKY,SCREEN_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 2, 4)
+    game=Game(BLOCKX, BLOCKY, 2, 40)
     print("POS AGENTS:")
     for agent in game.agents:
         print(agent.pos)
@@ -86,6 +90,15 @@ if __name__ == "__main__":
         start = pygame.time.get_ticks()
         tick += 1
 
+        # Pousse arbre
+        if (tick % POUSSE == 0):
+            game.growArbres()
+        # Pousse fruits
+        if (tick % MATURATION == 0):
+            game.growFruits()
+
+        # Update arbre
+        game.updateArbre()
         # Update de la grille
         create_level(screen,grid,sizeBlock)
 
