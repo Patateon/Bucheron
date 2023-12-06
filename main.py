@@ -37,6 +37,9 @@ def create_level(screen:pygame.surface.Surface, grid:Grille, sizeBlock:int):
     fruit_image = pygame.transform.scale(fruit_image,sprite_size)
     lumber_image = pygame.image.load("sprite/lumberjack.png")
     lumber_image = pygame.transform.scale(lumber_image,sprite_size)
+    harvester_image = pygame.image.load("sprite/harvester.png")
+    harvester_image = pygame.transform.scale(harvester_image,sprite_size)
+    screen.fill((0,0,0))
     for x in range(BLOCKX):
         for y in range(BLOCKY):
             cell=grid.getCell((y,x))
@@ -66,7 +69,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT+DISPLAY_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(GAME_HEIGHT//BLOCKY,GAME_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 2, 40)
+    game=Game(BLOCKX, BLOCKY, 10, 40)
     print("POS AGENTS:")
     for agent in game.agents:
         print(agent.pos)
