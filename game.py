@@ -80,15 +80,20 @@ class Game:
 
     def getClosestFruitTree(self, agentX, agentY):
         closest = 0
-        arbrePos = self.arbres[0].getPos()
-        dist1 = abs(agentX - arbrePos[0]) + abs(agentY - arbrePos[1])
+        if(self.arbres[0].getState == 4):
+            arbrePos = self.arbres[0].getPos()
+            dist1 = abs(agentX - arbrePos[0]) + abs(agentY - arbrePos[1])
         for i in range(1, len(self.arbres)):
-            arbrePos = self.arbres[i].getPos()
-            dist2 = abs(agentX - arbrePos[0]) + abs(agentY - arbrePos[1])
-            if(dist2 < dist1):
-                dist1 = dist2
-                closest = i
-        return self.arbres[closest]
+            if(self.arbres[i].getState == 4):
+                arbrePos = self.arbres[i].getPos()
+                dist2 = abs(agentX - arbrePos[0]) + abs(agentY - arbrePos[1])
+                if(dist2 < dist1):
+                    dist1 = dist2
+                    closest = i
+        if(self.arbres[0].getState == 4):
+            return self.arbres[closest]
+        else:
+            return
 
     #On veux couper un Arbre donc on trouve une position adjacente à celui-ci qui est la plus proche de l'agent:
     def getAdjacentPos(self, agentX, agentY, arbreX, arbreY):
@@ -135,15 +140,21 @@ class Game:
 
     def update(self):
         for agent in self.agents:
-            lastPos = agent.getPos()
-            agent.doNextMove(self.grille)
-            self.setCell([lastPos[1], lastPos[0]], 0)
-            self.setCell([agent.getPos()[1], agent.getPos()[0]], 5)
+            if(agent.getGoal()):
+                lastPos = agent.getPos()
+                agent.doNextMove(self.grille)
+                self.setCell([lastPos[1], lastPos[0]], 0)
+                self.setCell([agent.getPos()[1], agent.getPos()[0]], 5)
+            else:
+                agent.generateGoals()
         for cueilleur in self.cueilleurs:
-            lastPos = cueilleur.getPos()
-            cueilleur.doNextMove(self.grille)
-            self.setCell([lastPos[1], lastPos[0]], 0)
-            self.setCell([cueilleur.getPos()[1], cueilleur.getPos()[0]], 6)
+            if(cueilleur.getGoal())
+                lastPos = cueilleur.getPos()
+                cueilleur.doNextMove(self.grille)
+                self.setCell([lastPos[1], lastPos[0]], 0)
+                self.setCell([cueilleur.getPos()[1], cueilleur.getPos()[0]], 6)
+            else:
+                cueilleur.generateGoals()
 
     def getCell(self, position):
         return self.grille.getCell(position)

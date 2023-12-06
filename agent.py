@@ -9,6 +9,7 @@ OUEST = tuple([-1, 0])
 class Agent:
     def __init__(self, agentX, agentY, arbreGoalX, arbreGoalY, posGoalX, posGoalY):
         self.pos = [agentX, agentY]
+        self.goal = 0
         self.arbreGoal = [arbreGoalX, arbreGoalY]
         self.posGoal = [posGoalX, posGoalY]
         self.path = []
@@ -18,6 +19,12 @@ class Agent:
 
     def setPos(self, x, y): # Peut etre utile mais normalement non
         self.pos = [x, y]
+
+    def getGoal(self):
+        return self.goal
+
+    def setGoal(self, x):
+        self.goal = x
 
     def getArbreGoal(self):
         return self.arbreGoal
