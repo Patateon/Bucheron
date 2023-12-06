@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import arbre
 import agent
+from score import *
 from grille import *
 from astar import *
 import random
@@ -13,6 +14,7 @@ class Game:
         self.nbArbres = nbArbres
         self.arbres = []
         self.agents = []
+        self.score = Score()
         self.initGame()
         self.score = Score(valueBois, valueFruit)
 
