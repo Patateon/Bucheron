@@ -17,7 +17,7 @@ BLOCKY = 15
 SPACING = 1
 
 # Colors
-EMPTY_CLR = (240, 234, 210)
+EMPTY_CLR = (200, 234, 170)
 LOWTREE_CLR = (167, 201, 87)
 MIDTREE_CLR = (106, 153, 78)
 HIGHTREE_CLR = (56, 102, 65)
@@ -31,24 +31,38 @@ POUSSE = 5
 MATURATION = 30
 
 # Dessine la grille
-def create_level(screen, grid, sizeBlock):
+def create_level(screen:pygame.surface.Surface, grid:Grille, sizeBlock:int):
+    sprite_size = (2*(sizeBlock - 2*SPACING), 2*(sizeBlock - 2*SPACING))
+    low_image = pygame.image.load("sprite/low_tree.png")
+    low_image = pygame.transform.scale(low_image,sprite_size)
+    mid_image = pygame.image.load("sprite/mid_tree.png")
+    mid_image = pygame.transform.scale(mid_image,sprite_size)
+    big_image = pygame.image.load("sprite/big_tree.png")
+    big_image = pygame.transform.scale(big_image,sprite_size)
+    fruit_image = pygame.image.load("sprite/fruit_tree.png")
+    fruit_image = pygame.transform.scale(fruit_image,sprite_size)
+    lumber_image = pygame.image.load("sprite/lumberjack.png")
+    lumber_image = pygame.transform.scale(lumber_image,sprite_size)
+    harvester_image = pygame.image.load("sprite/harvester.png")
+    harvester_image = pygame.transform.scale(harvester_image,sprite_size)
+    screen.fill((0,0,0))
     for x in range(BLOCKX):
         for y in range(BLOCKY):
             cell=grid.getCell((y,x))
             rectangle=pygame.rect.Rect(sizeBlock*x + SPACING, sizeBlock*y + SPACING, sizeBlock - 2*SPACING, sizeBlock - 2*SPACING) # Spacing de 1 provisoire pour les tests
+            position = (sizeBlock*x + SPACING/2-sizeBlock/2, sizeBlock*y + SPACING/2-sizeBlock)
+            pygame.draw.rect(screen, EMPTY_CLR, rectangle)
             match cell:
-                case State.vide:
-                    pygame.draw.rect(screen, EMPTY_CLR, rectangle)
                 case State.lowTree:
-                    pygame.draw.rect(screen, LOWTREE_CLR, rectangle)
+                    screen.blit(low_image, position)
                 case State.midTree:
-                    pygame.draw.rect(screen, MIDTREE_CLR, rectangle)
+                    screen.blit(mid_image, position)
                 case State.highTree:
-                    pygame.draw.rect(screen, HIGHTREE_CLR, rectangle)
+                    screen.blit(big_image, position)
                 case State.fruitTree:
-                    pygame.draw.rect(screen, FRUITTREE_CLR, rectangle)
+                    screen.blit(fruit_image, position)
                 case State.lumber:
-                    pygame.draw.rect(screen, LUMBER_CLR, rectangle)
+                    screen.blit(lumber_image, position)
                 case State.harvest:
                     pygame.draw.rect(screen, HARVEST_CLR, rectangle)
                 case 7:
