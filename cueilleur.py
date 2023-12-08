@@ -7,11 +7,11 @@ EST = tuple([1, 0])
 OUEST = tuple([-1, 0])
 
 class Cueilleur:
-    def __init__(self, cueillX, cueillY, arbreGoalX, arbreGoalY, posGoalX, posGoalY):
+    def __init__(self, cueillX, cueillY):
         self.pos = [cueillX, cueillY]
         self.goal = 0
-        self.arbreGoal = [arbreGoalX, arbreGoalY]
-        self.posGoal = [posGoalX, posGoalY]
+        self.arbreGoal = []
+        self.posGoal = []
         self.path = []
 
     def getPos(self):

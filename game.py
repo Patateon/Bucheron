@@ -57,18 +57,8 @@ class Game:
             if(self.grille.getCell(newCueilleur) == 0):
                 self.grille.setCell(newCueilleur, State.harvest)
                 #On trouve l'arbre le plus proche
-                arbreGoal = self.getClosestFruitTree(newCueilleur[1], newCueilleur[0])
-                if(arbreGoal != None):
-                    arbreGoalPos = arbreGoal.getPos()
-                    #On trouve une position adjacente a l'arbre le plus proche
-                    posGoal = self.getAdjacentPos(newCueilleur[1], newCueilleur[0], arbreGoalPos[0], arbreGoalPos[1])
-                    thatCueilleur = cueilleur.Cueilleur(newCueilleur[1], newCueilleur[0], arbreGoalPos[0], arbreGoalPos[1], posGoal[0], posGoal[1])
-                    thatCueilleur.setGoal(1)
-                    self.cueilleurs.append(thatCueilleur)
-                else:
-                    thatCueilleur = cueilleur.Cueilleur(newCueilleur[1], newCueilleur[0], None, None, None, None)
-                    thatCueilleur.setGoal(0)
-                    self.cueilleurs.append(thatCueilleur)
+                thatCueilleur = cueilleur.Cueilleur(newCueilleur[1], newCueilleur[0])
+                self.cueilleurs.append(thatCueilleur)
                 nbA +=1
 
 
@@ -78,28 +68,33 @@ class Game:
         dist1 = abs(agentX - arbrePos[0]) + abs(agentY - arbrePos[1])
         for i in range(1, len(self.arbres)):
             arbrePos = self.arbres[i].getPos()
-            dist2 = abs(agentX - arbrePos[0]) + abs(agentY - arbrePos[1])
-            if(dist2 < dist1):
-                dist1 = dist2
-                closest = i
-        return self.arbres[closest]
-
-    def getClosestFruitTree(self, agentX, agentY):
-        closest = 0
-        if(self.arbres[0].getState == 4):
-            arbrePos = self.arbres[0].getPos()
-            dist1 = abs(agentX - arbrePos[0]) + abs(agentY - arbrePos[1])
-        for i in range(1, len(self.arbres)):
-            if(self.arbres[i].getState == 4):
-                arbrePos = self.arbres[i].getPos()
+            if(not self.arbres[i].getTaken()):
                 dist2 = abs(agentX - arbrePos[0]) + abs(agentY - arbrePos[1])
                 if(dist2 < dist1):
                     dist1 = dist2
                     closest = i
-        if(self.arbres[closest].getState == 4):
+        self.arbres[closest].setTaken(True)
+        return self.arbres[closest]
+
+    def getClosestFruitTree(self, agentX, agentY):
+        closest = 0
+        dist1 = 999999999
+        for i in range(len(self.arbres)):
+            if(self.arbres[i].getState() == State.fruitTree):
+                print("FRUIIIIIT")
+                arbrePos = self.arbres[i].getPos()
+                if(not self.arbres[i].getTaken()):
+                    dist2 = abs(agentX - arbrePos[0]) + abs(agentY - arbrePos[1])
+                    if(dist2 < dist1):
+                        dist1 = dist2
+                        closest = i
+        self.arbres[closest].setTaken(True)
+        if(self.arbres[closest].getState() == State.fruitTree):
+            print("A")
             return self.arbres[closest]
         else:
-            return
+            print("B")
+            return None
 
     #On veux couper un Arbre donc on trouve une position adjacente à celui-ci qui est la plus proche de l'agent:
     def getAdjacentPos(self, agentX, agentY, arbreX, arbreY):
@@ -137,6 +132,8 @@ class Game:
                 self.arbres.remove(arbre)
                 game.score.increaseWoodScore()
             self.grille.setCell(arbre.getPos(), arbre.getState())
+        for agent in self.agents:
+            print(agent.getPosGoal())
 
     def generateGoalAgent(self, agent):
         print("generateGoals()")
@@ -158,14 +155,24 @@ class Game:
         print("-------------------")
 
     def generateGoalCueilleur(self, cueilleur):
-        #print("-----------")
-        #print("cueilleur.pos :", cueilleur.pos)
-        #print("cueilleur.arbreGoal :", cueilleur.arbreGoal)
-        #print("cueilleur.posGoal :", cueilleur.posGoal)
-        #astar = Astar(self.grille)
-        #astar.startSearch(np.array(cueilleur.pos), np.array(cueilleur.posGoal))
-        #astar.showPath()
-        #cueilleur.setPath(astar.path)
+        print("-----------")
+        arbreGoal = self.getClosestFruitTree(cueilleur.getPos()[1], cueilleur.getPos()[0])
+        if(arbreGoal):
+            cueilleur.arbreGoal = [arbreGoal.getPos()[1], arbreGoal.getPos()[0]]
+            #On trouve une position adjacente a l'arbre le plus proche
+            cueilleur.posGoal = self.getAdjacentPos(cueilleur.getPos()[1], cueilleur.getPos()[0], cueilleur.arbreGoal[0], cueilleur.arbreGoal[1])
+        print("cueilleur.pos :", cueilleur.pos)
+        print("cueilleur.arbreGoal :", cueilleur.arbreGoal)
+        print("cueilleur.posGoal :", cueilleur.posGoal)
+        print(cueilleur.arbreGoal)
+        if(len(cueilleur.arbreGoal)):
+            astar = Astar(self.grille)
+            astar.startSearch(np.array(cueilleur.pos), np.array(cueilleur.posGoal))
+            #astar.showPath()
+            cueilleur.setPath(astar.path)
+            cueilleur.setGoal(1)
+        else:
+            cueilleur.setGoal(0)
         print("-------------------")
 
     def generateGoals(self):

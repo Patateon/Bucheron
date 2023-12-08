@@ -5,6 +5,7 @@ class Arbre():
     def __init__(self, x, y, state:State):
         self.pos = [x, y]
         self.state = state
+        self.taken = False
         self.pv = 5
 
     def grow(self):
@@ -32,3 +33,9 @@ class Arbre():
 
     def setPV(self, pv):
         self.pv = pv
+
+    def getTaken(self):
+        return self.taken
+
+    def setTaken(self, taken):
+        self.taken = taken
