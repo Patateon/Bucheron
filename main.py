@@ -4,6 +4,7 @@ from game import *
 from agent import *
 from state import *
 from astar import *
+from cueilleur import *
 import sys
 
 # Constants
@@ -22,7 +23,12 @@ MIDTREE_CLR = (106, 153, 78)
 HIGHTREE_CLR = (56, 102, 65)
 FRUITTREE_CLR = (249, 65, 68)
 LUMBER_CLR = (160, 2, 160)#VIOLET
+HARVEST_CLR = (0, 0, 0)#NOIR
 DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
+
+# Les delais
+POUSSE = 5
+MATURATION = 30
 
 # Dessine la grille
 def create_level(screen:pygame.surface.Surface, grid:Grille, sizeBlock:int):
@@ -57,7 +63,9 @@ def create_level(screen:pygame.surface.Surface, grid:Grille, sizeBlock:int):
                     screen.blit(fruit_image, position)
                 case State.lumber:
                     screen.blit(lumber_image, position)
-                case 6:
+                case State.harvest:
+                    pygame.draw.rect(screen, HARVEST_CLR, rectangle)
+                case 7:
                     pygame.draw.rect(screen, DEBUG_CLR, rectangle)
 
 
@@ -69,11 +77,11 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT+DISPLAY_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(GAME_HEIGHT//BLOCKY,GAME_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 10, 40)
-    print("POS AGENTS:")
-    for agent in game.agents:
-        print(agent.pos)
-    print("-----------------------")
+    game=Game(BLOCKX, BLOCKY, 10, 2, 15, 10, 3)
+    #print("POS AGENTS:")
+    #for agent in game.agents:
+        #print(agent.pos)
+    #print("-----------------------")
     grid = game.grille #A remplacer par avec la creation du jeux
 
     '''
@@ -101,6 +109,15 @@ if __name__ == "__main__":
         start = pygame.time.get_ticks()
         tick += 1
 
+        # Pousse arbre
+        if (tick % POUSSE == 0):
+            game.growArbres()
+        # Pousse fruits
+        if (tick % MATURATION == 0):
+            game.growFruits()
+
+        # Update arbre
+        game.updateArbre()
         # Update de la grille
         interface_surface.fill((255,255,255))
         interface_surface.blit(font.render(f'Temps : {pygame.time.get_ticks()//1000}s', True, (0,0,0)),(10,10))

@@ -6,12 +6,12 @@ SUD = tuple([0, 1])
 EST = tuple([1, 0])
 OUEST = tuple([-1, 0])
 
-class Agent:
-    def __init__(self, agentX, agentY):
-        self.pos = [agentX, agentY]
+class Cueilleur:
+    def __init__(self, cueillX, cueillY, arbreGoalX, arbreGoalY, posGoalX, posGoalY):
+        self.pos = [cueillX, cueillY]
         self.goal = 0
-        self.arbreGoal = []
-        self.posGoal = []
+        self.arbreGoal = [arbreGoalX, arbreGoalY]
+        self.posGoal = [posGoalX, posGoalY]
         self.path = []
 
     def getPos(self):
@@ -42,13 +42,10 @@ class Agent:
         return self.path
 
     def setPath(self, path):
-        if(path == False):
-            pass
-        else:
-            self.path = path
-            #On enlève la première position du path, qui est la pos du bucheron
-            print("setpath")
-            self.path.pop(0)
+        self.path = path
+        #On enlève la première position du path, qui est la pos du bucheron
+        print("setpath")
+        self.path.pop(0)
 
     def can_move(self, x, y, grille):
         print("next move :")
@@ -62,7 +59,6 @@ class Agent:
         print(self.getPos())
         print(self.getPosGoal())
         if(self.getPos() == self.getPosGoal()):
-            #self.setGoal(0)
             print("Goal atteint")
             return
         #si path vide
