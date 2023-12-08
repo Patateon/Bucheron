@@ -7,3 +7,4 @@ class State(IntEnum):
     highTree = 3
     fruitTree = 4
     lumber = 5
+    harvest = 6

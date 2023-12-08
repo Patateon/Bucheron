@@ -1,18 +1,33 @@
 
 class Score():
 
-    def __init__(self):
+    def __init__(self, valueBois, valueFruit):
         self.score = 0
-        self.nbScoreBois = 0
+        self.nbBois = 0
+        self.nbFruit = 0
+        self.valueBois = valueBois
+        self.valueFruit = valueFruit
 
     def updateScore(self):
-        self.score += nbScoreBois
+        self.score = nbBois + nbFruit
+
+    def increaseWoodScore(self):
+        self.nbBois += valueBois
+
+    def increaseFruitScore(self):
+        self.nbFruit += valueFruit
 
     def getScore(self):
         return self.score
 
-    def setNbScoreBois(self, nbScoreBois):
-        self.nbScoreBois = nbScoreBois
+    def setNbBois(self, nbBois):
+        self.nbBois = nbBois
 
-    def getNbScoreBois(self):
-        return self.nbScoreBois
+    def getNbBois(self):
+        return self.nbBois
+
+    def setNbFruit(self, nbFruit):
+        self.nbFruit = nbFruit
+
+    def getNbFruit(self):
+        return self.nbFruit

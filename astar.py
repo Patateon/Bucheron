@@ -7,9 +7,8 @@ from game import *
 
 class Astar():
 
-    def __init__(self, game):
-        self.game = game
-        self.grille = self.game.grille
+    def __init__(self, grille):
+        self.grille = grille
         self.openSet = []
         self.closeSet = {None}
         self.path = []
@@ -46,8 +45,9 @@ class Astar():
         neighbours = []
         for offset in np.array([[1, 0], [0, 1], [-1, 0], [0, -1]]):
             tmp = offset + position
-            if (tmp[0] >= 0 and tmp[0] < self.game.grille.x and tmp[1] >= 0 and tmp[1] < self.game.grille.y):
-                if (self.game.grille.getCell([tmp[1], tmp[0]]) == State.vide):
+            if (tmp[0] >= 0 and tmp[0] < self.grille.x and tmp[1] >= 0 and tmp[1] < self.grille.y):
+                aled = self.grille.getCell([tmp[1], tmp[0]])
+                if (aled == State.vide) or (aled == State.lumber) or (aled == State.harvest):
                     neighbours.append(Node(tmp, True))
                 else:
                     neighbours.append(Node(tmp, False))
@@ -105,10 +105,5 @@ class Astar():
             print("No path found !\n")
         else:
             for node in self.path:
-                if (self.game.grille.getCell([node.getPosition()[1], node.getPosition()[0]]) == State.vide):
-                    self.game.grille.setCell([node.getPosition()[1], node.getPosition()[0]], 6)
-
-
-    
-
-
+                if (self.grille.getCell([node.getPosition()[1], node.getPosition()[0]]) == State.vide):
+                    self.grille.setCell([node.getPosition()[1], node.getPosition()[0]], 6)
