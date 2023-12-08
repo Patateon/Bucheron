@@ -17,7 +17,7 @@ BLOCKY = 15
 SPACING = 1
 
 # Colors
-EMPTY_CLR = (240, 234, 210)
+EMPTY_CLR = (200, 234, 170)
 LOWTREE_CLR = (167, 201, 87)
 MIDTREE_CLR = (106, 153, 78)
 HIGHTREE_CLR = (56, 102, 65)
@@ -31,7 +31,7 @@ POUSSE = 5
 MATURATION = 30
 
 # Dessine la grille
-def create_level(screen, grid, sizeBlock):
+def create_level(screen:pygame.surface.Surface, grid:Grille, sizeBlock:int):
     sprite_size = (2*(sizeBlock - 2*SPACING), 2*(sizeBlock - 2*SPACING))
     low_image = pygame.image.load("sprite/low_tree.png")
     low_image = pygame.transform.scale(low_image,sprite_size)
