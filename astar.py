@@ -30,6 +30,9 @@ class Astar():
         # print(self.openSet)
         self.path = self.findPath(start, end)
 
+    def getPath(self):
+        return self.path
+
     """ 
     Pourrait servir qui sait
     def minF_set(self):

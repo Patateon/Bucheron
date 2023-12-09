@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from state import *
+from game import *
 
 NORD = tuple([0, -1])
 SUD = tuple([0, 1])
@@ -10,7 +11,7 @@ class Cueilleur:
     def __init__(self, cueillX, cueillY):
         self.pos = [cueillX, cueillY]
         self.goal = 0
-        self.arbreGoal = []
+        self.arbreGoal = None
         self.posGoal = []
         self.path = []
 
@@ -29,8 +30,8 @@ class Cueilleur:
     def getArbreGoal(self):
         return self.arbreGoal
 
-    def setArbreGoal(self, x, y):
-        self.arbreGoal = [x, y]
+    def setArbreGoal(self, arbreGoal):
+        self.arbreGoal = arbreGoal
 
     def getPosGoal(self):
         return self.posGoal
@@ -54,11 +55,16 @@ class Cueilleur:
             return True
         return False
 
+    def harvest(self, grille):
+        grille.setCell(self.arbreGoal.getPos(), State.highTree)
+        self.arbreGoal.setState(State.highTree)
+
     def doNextMove(self, grille):
         #si but atteint
         print(self.getPos())
         print(self.getPosGoal())
         if(self.getPos() == self.getPosGoal()):
+            self.harvest(grille)
             print("Goal atteint")
             return
         #si path vide

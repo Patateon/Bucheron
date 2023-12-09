@@ -28,7 +28,7 @@ DEBUG_CLR = (0, 0, 255) # Utile pour debug les chemins
 
 # Les delais
 POUSSE = 5
-MATURATION = 30
+MATURATION = 10
 
 # Dessine la grille
 def create_level(screen:pygame.surface.Surface, grid:Grille, sizeBlock:int):
@@ -116,6 +116,9 @@ if __name__ == "__main__":
         # Pousse fruits
         if (tick % MATURATION == 0):
             game.growFruits()
+
+        # afficher grille
+        print(game.grille.grille)
 
         # Update arbre
         game.updateArbre()
