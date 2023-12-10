@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from state import *
 from game import *
+from arbre import *
 
 NORD = tuple([0, -1])
 SUD = tuple([0, 1])
@@ -8,12 +9,13 @@ EST = tuple([1, 0])
 OUEST = tuple([-1, 0])
 
 class Cueilleur:
-    def __init__(self, cueillX, cueillY):
+    def __init__(self, cueillX, cueillY, game):
         self.pos = [cueillX, cueillY]
         self.goal = 0
         self.arbreGoal = None
         self.posGoal = []
         self.path = []
+        self.game = game
 
     def getPos(self):
         return self.pos
@@ -55,16 +57,37 @@ class Cueilleur:
             return True
         return False
 
+    def plant(self):
+        grille = self.game.grille
+        newPos = None
+        if   ( self.getPos()[1] > 0  and (grille.getCell([self.getPos()[1] - 1, self.getPos()[0]]) == State.vide) ):
+            newPos = [self.getPos()[1] - 1, self.getPos()[0]]
+        elif ( self.getPos()[0] > 0 and (grille.getCell([self.getPos()[1], self.getPos()[0] - 1]) == State.vide) ):
+            newPos = [self.getPos()[1], self.getPos()[0] - 1]
+        elif ( self.getPos()[1] < self.game.grille.x - 1 and (grille.getCell([self.getPos()[1] + 1, self.getPos()[0]]) == State.vide) ):
+            newPos = [self.getPos()[1] + 1, self.getPos()[0]]
+        elif ( self.getPos()[1] < self.game.grille.y - 1  and (grille.getCell([self.getPos()[1], self.getPos()[0] + 1]) == State.vide) ):
+            newPos = [self.getPos()[1], self.getPos()[0] + 1]
+        if (newPos != None):
+            arbre = Arbre(newPos[1], newPos[0], State.lowTree)
+            self.game.arbres.append(arbre)
+            self.game.nbArbres += 1
+            grille.setCell(newPos, State.lowTree)
+
     def harvest(self, grille):
         grille.setCell(self.arbreGoal.getPos(), State.highTree)
         self.arbreGoal.setState(State.highTree)
+        self.arbreGoal.setTaken(False)
 
     def doNextMove(self, grille):
         #si but atteint
         print(self.getPos())
         print(self.getPosGoal())
         if(self.getPos() == self.getPosGoal()):
-            self.harvest(grille)
+            if (self.arbreGoal.getState() == State.fruitTree):
+                self.harvest(grille)
+            else:
+                self.setGoal(0)
             print("Goal atteint")
             return
         #si path vide
@@ -79,3 +102,5 @@ class Cueilleur:
         #cas bloqué
         else:
             print("cannot move")
+            self.setGoal(0)
+            return

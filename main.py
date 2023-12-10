@@ -78,18 +78,12 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT+DISPLAY_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(GAME_HEIGHT//BLOCKY,GAME_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 2, 2, 4, 10, 3)
+    game=Game(BLOCKX, BLOCKY, 5, 5, 10, 10, 3, 5) # bucheron, cueilleur, arbre, valeurBois, valeurFruits, seuil
     #print("POS AGENTS:")
     #for agent in game.agents:
         #print(agent.pos)
     #print("-----------------------")
     grid = game.grille #A remplacer par avec la creation du jeux
-
-    '''
-    astar = Astar(grid)
-    astar.startSearch(np.array([0, 0]), np.array([14, 14]))
-    astar.showPath()
-    '''
 
     running = True
     delay = 400
@@ -117,8 +111,8 @@ if __name__ == "__main__":
         if (tick % MATURATION == 0):
             game.growFruits()
 
-        # afficher grille
-        print(game.grille.grille)
+        # # afficher grille
+        # print(game.grille.grille)
 
         # Update arbre
         game.updateArbre()
@@ -136,7 +130,6 @@ if __name__ == "__main__":
         pygame.time.delay(actualDelay)
 
         pygame.display.update()
-        print("tick")
         game.update()
 
     pygame.quit()

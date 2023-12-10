@@ -66,8 +66,10 @@ class Agent:
         # print(self.getPos())
         # print(self.getPosGoal())
         if(self.getPos() == self.getPosGoal()):
-            self.cut(grille)
-            #self.setGoal(0)
+            if (self.arbreGoal.getPV() > 0):
+                self.cut(grille)
+            else:
+                self.setGoal(0)
             # print("Goal atteint")
             return
         #si path vide
@@ -82,3 +84,5 @@ class Agent:
         #cas bloqué
         else:
             print("cannot move")
+            self.setGoal(0)
+            return
