@@ -12,8 +12,8 @@ GAME_WIDTH =800
 GAME_HEIGHT = 600
 DISPLAY_HEIGHT = 100
 # Dimensions de la grille
-BLOCKX = 20
-BLOCKY = 15
+BLOCKX = 10
+BLOCKY = 7
 SPACING = 1
 
 # Colors
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT+DISPLAY_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(GAME_HEIGHT//BLOCKY,GAME_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 5, 5, 10, 10, 3, 5) # bucheron, cueilleur, arbre, valeurBois, valeurFruits, seuil
+    game=Game(BLOCKX, BLOCKY, 2, 2, 7, 1, 1, 3) # bucheron, cueilleur, arbre, valeurBois, valeurFruits, seuil
     #print("POS AGENTS:")
     #for agent in game.agents:
         #print(agent.pos)
@@ -119,7 +119,9 @@ if __name__ == "__main__":
         # Update de la grille
         interface_surface.fill((255,255,255))
         interface_surface.blit(font.render(f'Temps : {pygame.time.get_ticks()//1000}s', True, (0,0,0)),(10,10))
-        interface_surface.blit(font.render(f'Score : {game.score.getScore()}pts', True, (0,0,0)),(GAME_WIDTH//2,10))
+        interface_surface.blit(font.render(f'Score : {game.score.getScore()} pts', True, (0,0,0)),(GAME_WIDTH//2,10))
+        interface_surface.blit(font.render(f'Bois : {game.score.getNbBois()} bois', True, (0,0,0)),(GAME_WIDTH//2,35))
+        interface_surface.blit(font.render(f'Fruits : {game.score.getNbFruit()} fruits', True, (0,0,0)),(GAME_WIDTH//2,60))
         screen.blit(interface_surface,(0,0))
         create_level(game_surface,grid,sizeBlock)
         screen.blit(game_surface,(0,DISPLAY_HEIGHT))

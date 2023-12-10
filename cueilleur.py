@@ -47,12 +47,12 @@ class Cueilleur:
     def setPath(self, path):
         self.path = path
         #On enlève la première position du path, qui est la pos du bucheron
-        print("setpath")
+        # print("setpath")
         self.path.pop(0)
 
     def can_move(self, x, y, grille):
-        print("next move :")
-        print(grille.grille[y][x])
+        # print("next move :")
+        # print(grille.grille[y][x])
         if(grille.grille[y][x] == State.vide):
             return True
         return False
@@ -64,15 +64,17 @@ class Cueilleur:
             newPos = [self.getPos()[1] - 1, self.getPos()[0]]
         elif ( self.getPos()[0] > 0 and (grille.getCell([self.getPos()[1], self.getPos()[0] - 1]) == State.vide) ):
             newPos = [self.getPos()[1], self.getPos()[0] - 1]
-        elif ( self.getPos()[1] < self.game.grille.x - 1 and (grille.getCell([self.getPos()[1] + 1, self.getPos()[0]]) == State.vide) ):
+        elif ( self.getPos()[1] < self.game.grille.y - 1 and (grille.getCell([self.getPos()[1] + 1, self.getPos()[0]]) == State.vide) ):
             newPos = [self.getPos()[1] + 1, self.getPos()[0]]
-        elif ( self.getPos()[1] < self.game.grille.y - 1  and (grille.getCell([self.getPos()[1], self.getPos()[0] + 1]) == State.vide) ):
+        elif ( self.getPos()[1] < self.game.grille.x - 1  and (grille.getCell([self.getPos()[1], self.getPos()[0] + 1]) == State.vide) ):
             newPos = [self.getPos()[1], self.getPos()[0] + 1]
         if (newPos != None):
             arbre = Arbre(newPos[1], newPos[0], State.lowTree)
             self.game.arbres.append(arbre)
             self.game.nbArbres += 1
             grille.setCell(newPos, State.lowTree)
+            self.game.score.plantFruit()
+            self.game.score.updateScore()
 
     def harvest(self, grille):
         grille.setCell(self.arbreGoal.getPos(), State.highTree)
@@ -105,4 +107,5 @@ class Cueilleur:
         else:
             # print("cannot move")
             self.setGoal(0)
+            self.arbreGoal.setTaken(False)
             return

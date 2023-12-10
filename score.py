@@ -17,6 +17,9 @@ class Score():
     def increaseFruitScore(self):
         self.nbFruit += self.valueFruit
 
+    def plantFruit(self):
+        self.nbFruit -= self.valueFruit
+
     def getScore(self):
         return self.score
 
@@ -31,3 +34,6 @@ class Score():
 
     def getNbFruit(self):
         return self.nbFruit
+
+    def getValueFruit(self):
+        return self.valueFruit

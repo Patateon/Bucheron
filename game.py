@@ -46,7 +46,7 @@ class Game:
             newAgent = (random.randint(0,self.grille.y - 1),random.randint(0,self.grille.x - 1))
             if(self.grille.getCell(newAgent) == 0):
                 self.grille.setCell(newAgent, State.lumber)
-                thatAgent = agent.Agent(newAgent[1], newAgent[0])
+                thatAgent = agent.Agent(newAgent[1], newAgent[0], self)
                 self.agents.append(thatAgent)
                 nbA +=1
 
@@ -99,6 +99,7 @@ class Game:
         if(self.arbres[closest].getState() == State.fruitTree):
             # print("A")
             return self.arbres[closest]
+            print(closest)
         else:
             # print("B")
             return None
@@ -155,6 +156,11 @@ class Game:
         if (arbreGoal == None):
             agent.setGoal(0)
             return
+        if (arbreGoal.getState() < State.lowTree):
+            agent.setGoal(0)
+            arbreGoal.setTaken(False)
+            return
+
         agent.arbreGoal = arbreGoal
         #On trouve une position adjacente a l'arbre le plus proche
         agent.posGoal = self.getAdjacentPos(agent.getPos()[1], agent.getPos()[0], agent.arbreGoal.getPos()[1], agent.arbreGoal.getPos()[0])
@@ -174,7 +180,7 @@ class Game:
     def generateGoalCueilleur(self, cueilleur):
         # print("-----------")
 
-        if (self.nbArbres <= self.seuil):
+        if ( (self.nbArbres <= self.seuil) and (self.score.getNbFruit() >= self.score.getValueFruit()) ):
             cueilleur.plant()
             cueilleur.setGoal(0)
             return

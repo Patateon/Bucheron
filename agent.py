@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from state import *
+from game import *
 
 NORD = tuple([0, -1])
 SUD = tuple([0, 1])
@@ -7,12 +8,13 @@ EST = tuple([1, 0])
 OUEST = tuple([-1, 0])
 
 class Agent:
-    def __init__(self, agentX, agentY):
+    def __init__(self, agentX, agentY, game):
         self.pos = [agentX, agentY]
         self.goal = 0
         self.arbreGoal = None
         self.posGoal = []
         self.path = []
+        self.game = game
 
     def getPos(self):
         return self.pos
@@ -50,6 +52,20 @@ class Agent:
             # print("setpath")
             self.path.pop(0)
 
+    def move(self):
+        grille = self.game.grille
+        newPos = None
+        if   ( self.getPos()[1] > 0  and (grille.getCell([self.getPos()[1] - 1, self.getPos()[0]]) == State.vide) ):
+            newPos = [self.getPos()[1] - 1, self.getPos()[0]]
+        elif ( self.getPos()[0] > 0 and (grille.getCell([self.getPos()[1], self.getPos()[0] - 1]) == State.vide) ):
+            newPos = [self.getPos()[1], self.getPos()[0] - 1]
+        elif ( self.getPos()[1] < self.game.grille.y - 1 and (grille.getCell([self.getPos()[1] + 1, self.getPos()[0]]) == State.vide) ):
+            newPos = [self.getPos()[1] + 1, self.getPos()[0]]
+        elif ( self.getPos()[1] < self.game.grille.x - 1  and (grille.getCell([self.getPos()[1], self.getPos()[0] + 1]) == State.vide) ):
+            newPos = [self.getPos()[1], self.getPos()[0] + 1]
+        self.setPos(newPos[1], newPos[0])
+        
+
     def cut(self, grille):
         self.arbreGoal.setPV(self.arbreGoal.getPV() - 1)
 
@@ -85,4 +101,6 @@ class Agent:
         else:
             print("cannot move")
             self.setGoal(0)
+            self.arbreGoal.setTaken(False)
+            self.move()
             return
