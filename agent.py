@@ -63,7 +63,8 @@ class Agent:
             newPos = [self.getPos()[1] + 1, self.getPos()[0]]
         elif ( self.getPos()[1] < self.game.grille.x - 1  and (grille.getCell([self.getPos()[1], self.getPos()[0] + 1]) == State.vide) ):
             newPos = [self.getPos()[1], self.getPos()[0] + 1]
-        self.setPos(newPos[1], newPos[0])
+        if (newPos != None):
+            self.setPos(newPos[1], newPos[0])
         
 
     def cut(self, grille):
@@ -90,6 +91,8 @@ class Agent:
             return
         #si path vide
         elif(len(self.path) == 0):
+            self.arbreGoal.setTaken(False)
+            self.setGoal(0)
             # print("pas de path")
             return
         #Cas où on doit faire un move

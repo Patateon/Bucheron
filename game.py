@@ -95,9 +95,9 @@ class Game:
                     if(dist2 < dist1):
                         dist1 = dist2
                         closest = i
-        self.arbres[closest].setTaken(True)
         if(self.arbres[closest].getState() == State.fruitTree):
             # print("A")
+            self.arbres[closest].setTaken(True)
             return self.arbres[closest]
             print(closest)
         else:
@@ -156,7 +156,7 @@ class Game:
         if (arbreGoal == None):
             agent.setGoal(0)
             return
-        if (arbreGoal.getState() < State.lowTree):
+        if (arbreGoal.getState() < State.midTree):
             agent.setGoal(0)
             arbreGoal.setTaken(False)
             return
@@ -181,8 +181,7 @@ class Game:
         # print("-----------")
 
         if ( (self.nbArbres <= self.seuil) and (self.score.getNbFruit() >= self.score.getValueFruit()) ):
-            cueilleur.plant()
-            cueilleur.setGoal(0)
+            cueilleur.setGoal(2)
             return
 
         arbreGoal = self.getClosestFruitTree(cueilleur.getPos()[1], cueilleur.getPos()[0])
@@ -226,7 +225,14 @@ class Game:
             else:
                 self.generateGoalAgent(agent)
         for cueilleur in self.cueilleurs:
-            if(cueilleur.getGoal()):
+            if(cueilleur.getGoal() == 2):
+                if ((self.score.getNbFruit() >= self.score.getValueFruit())):
+                    cueilleur.move()
+                    cueilleur.plant()
+                    cueilleur.setGoal(0)
+                else:
+                    cueilleur.setGoal(0)
+            elif(cueilleur.getGoal() == 1):
                 lastPos = cueilleur.getPos()
                 cueilleur.doNextMove(self.grille)
                 self.setCell([lastPos[1], lastPos[0]], 0)

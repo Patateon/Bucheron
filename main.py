@@ -48,25 +48,29 @@ def create_level(screen:pygame.surface.Surface, grid:Grille, sizeBlock:int):
     screen.fill((0,0,0))
     for x in range(BLOCKX):
         for y in range(BLOCKY):
-            cell=grid.getCell((y,x))
-            rectangle=pygame.rect.Rect(sizeBlock*x + SPACING, sizeBlock*y + SPACING, sizeBlock - 2*SPACING, sizeBlock - 2*SPACING) # Spacing de 1 provisoire pour les tests
-            position = (sizeBlock*x + SPACING/2-sizeBlock/2, sizeBlock*y + SPACING/2-sizeBlock)
-            pygame.draw.rect(screen, EMPTY_CLR, rectangle)
-            match cell:
-                case State.lowTree:
-                    screen.blit(low_image, position)
-                case State.midTree:
-                    screen.blit(mid_image, position)
-                case State.highTree:
-                    screen.blit(big_image, position)
-                case State.fruitTree:
-                    screen.blit(fruit_image, position)
-                case State.lumber:
-                    screen.blit(lumber_image, position)
-                case State.harvest:
-                    screen.blit(harvester_image, position)
-                case 7:
-                    pygame.draw.rect(screen, DEBUG_CLR, rectangle)
+            if (y == 0):
+                    pygame.draw.rect(screen, (255, 255, 255), pygame.rect.Rect(sizeBlock*x, sizeBlock*y, sizeBlock, sizeBlock))
+            else:
+                cell=grid.getCell((y-1,x))
+                rectangle=pygame.rect.Rect(sizeBlock*x + SPACING, sizeBlock*y + SPACING, sizeBlock - 2*SPACING, sizeBlock - 2*SPACING) # Spacing de 1 provisoire pour les tests
+                position = (sizeBlock*x + SPACING/2-sizeBlock/2, sizeBlock*y + SPACING/2-sizeBlock)
+                pygame.draw.rect(screen, EMPTY_CLR, rectangle)
+                match cell:
+                    case State.lowTree:
+                        screen.blit(low_image, position)
+                    case State.midTree:
+                        screen.blit(mid_image, position)
+                    case State.highTree:
+                        screen.blit(big_image, position)
+                    case State.fruitTree:
+                        screen.blit(fruit_image, position)
+                    case State.lumber:
+                        screen.blit(lumber_image, position)
+                    case State.harvest:
+                        screen.blit(harvester_image, position)
+                    case 7:
+                        pygame.draw.rect(screen, DEBUG_CLR, rectangle)
+
             
 
 
@@ -78,7 +82,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT+DISPLAY_HEIGHT))
     pygame.display.set_caption("Forest-Farming")
     sizeBlock=min(GAME_HEIGHT//BLOCKY,GAME_WIDTH//BLOCKX)
-    game=Game(BLOCKX, BLOCKY, 2, 2, 7, 1, 1, 3) # bucheron, cueilleur, arbre, valeurBois, valeurFruits, seuil
+    game=Game(BLOCKX, BLOCKY-1, 2, 2, 7, 1, 1, 3) # bucheron, cueilleur, arbre, valeurBois, valeurFruits, seuil
     #print("POS AGENTS:")
     #for agent in game.agents:
         #print(agent.pos)

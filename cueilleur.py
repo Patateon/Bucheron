@@ -76,6 +76,21 @@ class Cueilleur:
             self.game.score.plantFruit()
             self.game.score.updateScore()
 
+    def move(self):
+        grille = self.game.grille
+        newPos = None
+        if   ( self.getPos()[1] > 0  and (grille.getCell([self.getPos()[1] - 1, self.getPos()[0]]) == State.vide) ):
+            newPos = [self.getPos()[1] - 1, self.getPos()[0]]
+        elif ( self.getPos()[0] > 0 and (grille.getCell([self.getPos()[1], self.getPos()[0] - 1]) == State.vide) ):
+            newPos = [self.getPos()[1], self.getPos()[0] - 1]
+        elif ( self.getPos()[1] < self.game.grille.y - 1 and (grille.getCell([self.getPos()[1] + 1, self.getPos()[0]]) == State.vide) ):
+            newPos = [self.getPos()[1] + 1, self.getPos()[0]]
+        elif ( self.getPos()[1] < self.game.grille.x - 1  and (grille.getCell([self.getPos()[1], self.getPos()[0] + 1]) == State.vide) ):
+            newPos = [self.getPos()[1], self.getPos()[0] + 1]
+        if (newPos != None):
+            # self.game.setCell([self.getPos()[1], self.getPos()[0]], State.vide)
+            self.setPos(newPos[1], newPos[0])
+
     def harvest(self, grille):
         grille.setCell(self.arbreGoal.getPos(), State.highTree)
         self.arbreGoal.setState(State.highTree)
@@ -96,6 +111,8 @@ class Cueilleur:
             return
         #si path vide
         elif(len(self.path) == 0):
+            self.arbreGoal.setTaken(False)
+            self.setGoal(0)
             # print("pas de path")
             return
         #Cas où on doit faire un move
@@ -108,4 +125,5 @@ class Cueilleur:
             # print("cannot move")
             self.setGoal(0)
             self.arbreGoal.setTaken(False)
+            self.move()
             return
