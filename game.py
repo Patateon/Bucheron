@@ -100,7 +100,7 @@ class Game:
             # print("A")
             return self.arbres[closest]
         else:
-            print("B")
+            # print("B")
             return None
 
     #On veux couper un Arbre donc on trouve une position adjacente à celui-ci qui est la plus proche de l'agent:

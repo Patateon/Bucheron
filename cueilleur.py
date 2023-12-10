@@ -81,18 +81,18 @@ class Cueilleur:
 
     def doNextMove(self, grille):
         #si but atteint
-        print(self.getPos())
-        print(self.getPosGoal())
+        # print(self.getPos())
+        # print(self.getPosGoal())
         if(self.getPos() == self.getPosGoal()):
             if (self.arbreGoal.getState() == State.fruitTree):
                 self.harvest(grille)
             else:
                 self.setGoal(0)
-            print("Goal atteint")
+            # print("Goal atteint")
             return
         #si path vide
         elif(len(self.path) == 0):
-            print("pas de path")
+            # print("pas de path")
             return
         #Cas où on doit faire un move
         nextMove = self.path[0].getPosition()
@@ -101,6 +101,6 @@ class Cueilleur:
             self.path.pop(0)
         #cas bloqué
         else:
-            print("cannot move")
+            # print("cannot move")
             self.setGoal(0)
             return
