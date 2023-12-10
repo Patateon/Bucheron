@@ -78,6 +78,8 @@ class Cueilleur:
         grille.setCell(self.arbreGoal.getPos(), State.highTree)
         self.arbreGoal.setState(State.highTree)
         self.arbreGoal.setTaken(False)
+        self.game.score.increaseFruitScore()
+        self.game.score.updateScore()
 
     def doNextMove(self, grille):
         #si but atteint

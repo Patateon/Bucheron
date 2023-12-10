@@ -139,6 +139,7 @@ class Game:
                 self.arbres.remove(arbre)
                 self.nbArbres -= 1
                 self.score.increaseWoodScore()
+                self.score.updateScore()
             else:
                 self.grille.setCell(arbre.getPos(), arbre.getState())
 
