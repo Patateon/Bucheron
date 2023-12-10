@@ -136,10 +136,10 @@ class Game:
     def updateArbre(self):
         for arbre in self.arbres:
             if (arbre.getPV() < 1):
+                self.score.increaseWoodScore(arbre.getState())
                 self.grille.setCell(arbre.getPos(), 0)
                 self.arbres.remove(arbre)
                 self.nbArbres -= 1
-                self.score.increaseWoodScore()
                 self.score.updateScore()
             else:
                 self.grille.setCell(arbre.getPos(), arbre.getState())

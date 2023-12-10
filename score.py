@@ -11,8 +11,8 @@ class Score():
     def updateScore(self):
         self.score = self.nbBois + self.nbFruit
 
-    def increaseWoodScore(self):
-        self.nbBois += self.valueBois
+    def increaseWoodScore(self, number):
+        self.nbBois += self.valueBois * number
 
     def increaseFruitScore(self):
         self.nbFruit += self.valueFruit
